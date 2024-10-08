@@ -45,6 +45,9 @@ def tr_handler403(request, exception):
 
 
 class IndexView(ListView):
+    """
+    Отображение главной страницы с категориями услуг и гайдами.
+    """
     model = ProductCategory
     template_name = 'products/index.htm'
     context_object_name = 'categories'
