@@ -1,5 +1,8 @@
 from django.contrib import admin
-from products.models import ProductCategory, Product, Question, ProductDetail, Guide, NotUserReview, CarouselImage
+
+from products.models import (CarouselImage, Guide, NotUserReview, Product,
+                             ProductCategory, ProductDetail, Question)
+
 
 @admin.register(ProductCategory)
 class Admin(admin.ModelAdmin):

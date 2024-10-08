@@ -1,11 +1,11 @@
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from django.views.decorators.cache import cache_page
 
-from products.views import IndexView, CategoryDetailView, ProductDetailView, GuideDetailView
-from django.conf import settings
-from django.conf.urls.static import static
-
+from products.views import (CategoryDetailView, GuideDetailView, IndexView,
+                            ProductDetailView)
 
 app_name = 'products'
 urlpatterns = [

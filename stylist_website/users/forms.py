@@ -1,7 +1,10 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django import forms
-from users.models import User, Review, UserServices, ScheduleDate
+from django.contrib.auth.forms import (AuthenticationForm, PasswordChangeForm,
+                                       PasswordResetForm, SetPasswordForm,
+                                       UserCreationForm)
 from tempus_dominus.widgets import DateTimePicker
+
+from users.models import Review, ScheduleDate, User, UserServices
 from users.tasks import send_email_verification
 
 

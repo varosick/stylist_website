@@ -1,15 +1,15 @@
-from django.shortcuts import get_object_or_404, get_list_or_404, redirect
+from django.core.cache import cache
+from django.shortcuts import (get_list_or_404, get_object_or_404, redirect, render)
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
-from products.models import Product, ProductCategory, Question, ProductDetail, Guide, CarouselImage
-from users.forms import ServicePurchaseForm
-from users.models import UserGuides, ScheduleDate
-from django.core.cache import cache
-from users.tasks import send_emails_guides, send_emails_services
-from django.shortcuts import render
 
+from products.models import (CarouselImage, Guide, Product, ProductCategory,
+                             ProductDetail, Question)
+from users.forms import ServicePurchaseForm
+from users.models import ScheduleDate, UserGuides
+from users.tasks import send_emails_guides, send_emails_services
 
 
 def tr_handler404(request, exception):
@@ -42,8 +42,6 @@ def tr_handler403(request, exception):
     })
 
 
-
-
 class IndexView(ListView):
     """
     Отображение главной страницы с категориями услуг и гайдами.
@@ -61,6 +59,7 @@ class IndexView(ListView):
     def get_queryset(self):
         return ProductCategory.objects.all()
 
+
 class CategoryDetailView(ListView):
     """
     Отображение детального представления каждой категории услуг со всем списком, относящихся услуг.
@@ -74,9 +73,13 @@ class CategoryDetailView(ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['category'] =  cache.get_or_set(self.kwargs['category_slug'], ProductCategory.objects.get(slug=self.kwargs['category_slug']), 30)
-        context_data['questions'] = cache.get_or_set(f'question_{self.kwargs['category_slug']}', Question.objects.filter(category=context_data['category']), 30)
-        context_data['carousel_images'] = cache.get_or_set(f'carousel_{self.kwargs['category_slug']}', CarouselImage.objects.filter(category=context_data['category']), 30)
+        context_data['category'] = cache.get_or_set(self.kwargs['category_slug'],
+                                                    ProductCategory.objects.get(slug=self.kwargs['category_slug']), 30)
+        context_data['questions'] = cache.get_or_set(f'question_{self.kwargs['category_slug']}',
+                                                     Question.objects.filter(category=context_data['category']), 30)
+        context_data['carousel_images'] = cache.get_or_set(f'carousel_{self.kwargs['category_slug']}',
+                                                           CarouselImage.objects.filter(
+                                                               category=context_data['category']), 30)
         context_data['title'] = context_data['category']
         return context_data
 
@@ -97,7 +100,10 @@ class ProductDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['category'] = self.get_object().category
-        context_data['details'] = cache.get_or_set(f'details_{self.kwargs['product_slug']}', ProductDetail.objects.filter(product__slug=self.kwargs['product_slug']).order_by('-is_include', 'id'), 30)
+        context_data['details'] = cache.get_or_set(f'details_{self.kwargs['product_slug']}',
+                                                   ProductDetail.objects.filter(
+                                                       product__slug=self.kwargs['product_slug']).order_by(
+                                                       '-is_include', 'id'), 30)
         context_data['title'] = f'{self.get_object().name} {context_data["category"].name.lower()}'
         return context_data
 
@@ -136,7 +142,6 @@ class ProductDetailView(FormMixin, DetailView):
         return super().form_valid(form)
 
 
-
 class GuideDetailView(DetailView):
     model = Guide
     template_name = 'products/guide_detail.html'
@@ -148,7 +153,8 @@ class GuideDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            context_data['user_guides'] = UserGuides.objects.filter(user=self.request.user).values_list('guide__id', flat=True)
+            context_data['user_guides'] = UserGuides.objects.filter(user=self.request.user).values_list('guide__id',
+                                                                                                        flat=True)
         context_data['title'] = f'{self.get_object().name}'
         return context_data
 
@@ -164,5 +170,3 @@ class GuideDetailView(DetailView):
         user_guide.save()
         send_emails_guides.delay(user_guide.id)
         return redirect('users:user_guides')
-
-

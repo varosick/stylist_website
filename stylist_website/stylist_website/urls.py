@@ -15,11 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
+from django.urls import include, path
 from django.views.decorators.cache import cache_page
 
-from products.sitemaps import ProductSitemap, CategorySitemap, GuideSitemap
+from products.sitemaps import CategorySitemap, GuideSitemap, ProductSitemap
 
 sitemaps = {
     'categories': CategorySitemap,

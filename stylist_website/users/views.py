@@ -1,21 +1,29 @@
 
+from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import (LoginView, PasswordResetConfirmView,
+                                       PasswordResetView)
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.cache import cache
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (CreateView, DetailView, TemplateView,
+                                  UpdateView)
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
-from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetConfirmView
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView, DetailView, TemplateView
-from django.contrib import messages
-from users.models import User, Review, UserServices, UserGuides, EmailVerification
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm, ReviewAddForm, \
-    CustomPasswordChangeForm, UserForgotPasswordForm, UserSetNewPasswordForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+
 from products.models import NotUserReview
-from django.core.cache import cache
+from users.forms import (CustomPasswordChangeForm, ReviewAddForm,
+                         UserForgotPasswordForm, UserLoginForm,
+                         UserProfileForm, UserRegistrationForm,
+                         UserSetNewPasswordForm)
+from users.models import (EmailVerification, Review, User, UserGuides,
+                          UserServices)
+
+
 class UserLoginView(LoginView):
     template_name = 'profile/login.html'
     form_class = UserLoginForm

@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 
-from products.models import Product, ProductCategory, Guide
+from products.models import Guide, Product, ProductCategory
 
 
 class CategorySitemap(Sitemap):

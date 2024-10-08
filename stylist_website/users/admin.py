@@ -1,5 +1,7 @@
 from django.contrib import admin
-from users.models import User, Review, UserServices, ScheduleDate, EmailVerification, UserGuides
+
+from users.models import (EmailVerification, Review, ScheduleDate, User,
+                          UserGuides, UserServices)
 
 
 # Register your models here.
