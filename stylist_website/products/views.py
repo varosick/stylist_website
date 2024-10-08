@@ -62,6 +62,9 @@ class IndexView(ListView):
         return ProductCategory.objects.all()
 
 class CategoryDetailView(ListView):
+    """
+    Отображение детального представления каждой категории услуг со всем списком, относящихся услуг.
+    """
     template_name = 'products/category_detail.html'
     model = Product
     context_object_name = 'products'
