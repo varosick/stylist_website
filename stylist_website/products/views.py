@@ -73,13 +73,11 @@ class CategoryDetailView(ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['category'] = cache.get_or_set(self.kwargs['category_slug'],
-                                                    ProductCategory.objects.get(slug=self.kwargs['category_slug']), 30)
-        context_data['questions'] = cache.get_or_set(f'question_{self.kwargs['category_slug']}',
-                                                     Question.objects.filter(category=context_data['category']), 30)
-        context_data['carousel_images'] = cache.get_or_set(f'carousel_{self.kwargs['category_slug']}',
-                                                           CarouselImage.objects.filter(
-                                                               category=context_data['category']), 30)
+        context_data['category'] = cache.get_or_set(self.kwargs['category_slug'], ProductCategory.objects.get(slug=self.kwargs['category_slug']), 30)
+        key_for_q = 'question' + self.kwargs['category_slug']
+        context_data['questions'] = cache.get_or_set(key_for_q, Question.objects.filter(category=context_data['category']), 30)
+        key_for_ci = 'carousel_' + self.kwargs['category_slug']
+        context_data['carousel_images'] = cache.get_or_set(key_for_ci, CarouselImage.objects.filter(category=context_data['category']), 30)
         context_data['title'] = context_data['category']
         return context_data
 
@@ -100,11 +98,9 @@ class ProductDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['category'] = self.get_object().category
-        context_data['details'] = cache.get_or_set(f'details_{self.kwargs['product_slug']}',
-                                                   ProductDetail.objects.filter(
-                                                       product__slug=self.kwargs['product_slug']).order_by(
-                                                       '-is_include', 'id'), 30)
-        context_data['title'] = f'{self.get_object().name} {context_data["category"].name.lower()}'
+        key_for_details = 'details_' + self.kwargs['product_slug']
+        context_data['details'] = cache.get_or_set(key_for_details, ProductDetail.objects.filter(product__slug=self.kwargs['product_slug']).order_by('-is_include', 'id'), 30)
+        context_data['title'] = self.get_object().name + context_data["category"].name.lower()
         return context_data
 
     def post(self, request, *args, **kwargs):
@@ -153,9 +149,8 @@ class GuideDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            context_data['user_guides'] = UserGuides.objects.filter(user=self.request.user).values_list('guide__id',
-                                                                                                        flat=True)
-        context_data['title'] = f'{self.get_object().name}'
+            context_data['user_guides'] = UserGuides.objects.filter(user=self.request.user).values_list('guide__id', flat=True)
+        context_data['title'] = str(self.get_object().name)
         return context_data
 
     def post(self, request, *args, **kwargs):

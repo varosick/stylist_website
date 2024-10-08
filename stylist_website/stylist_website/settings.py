@@ -15,7 +15,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
-# CSRF_TRUSTED_ORIGINS = str(os.getenv('CSRF_TRUSTED_ORIGINS')).split(' ')
+CSRF_TRUSTED_ORIGINS = str(os.getenv('CSRF_TRUSTED_ORIGINS')).split(' ')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,10 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG = os.getenv('DEBUG')=='True'
 
-ALLOWED_HOSTS = ['*', ]
-
+ALLOWED_HOSTS = str(os.getenv('DJANGO_ALLOWED_HOSTS')).split(' ')
+INTERNAL_IPS = str(os.getenv('INTERNAL_IPS')).split(' ')
 DOMAIN_NAME = os.getenv('DOMAIN_NAME')
 
 
@@ -87,7 +87,7 @@ REDIS_PORT = os.getenv('REDIS_PORT')
 
 CACHES = {
     "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
+        "BACKEND": os.getenv('CACHES_BACKEND'),
         "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -100,12 +100,12 @@ CACHES = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'stylist_db',
-        'USER': 'stylist_admin',
-        'PASSWORD': '18052003',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': os.getenv('SQL_ENGINE'),
+        'NAME': os.getenv('SQL_DATABASE'),
+        'USER': os.getenv('SQL_USER'),
+        'PASSWORD': os.getenv('SQL_PASSWORD'),
+        'HOST': os.getenv('SQL_HOST'),
+        'PORT': os.getenv('SQL_PORT'),
     }
 }
 
@@ -144,8 +144,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATIC_URL = '/static/'
+if DEBUG:
+    STATICFILES_DIRS = [BASE_DIR / 'static']
+else:
+    STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -165,15 +168,15 @@ LOGOUT_REDIRECT_URL = '/'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'kallishevich.stylist@gmail.com'
-EMAIL_HOST_PASSWORD = 'eoyw tttm uizk vkur'
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 #Celery
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 
 SITE_ID = 1
