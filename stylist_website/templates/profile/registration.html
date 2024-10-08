@@ -1,0 +1,38 @@
+﻿{% extends 'profile/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="profile-form-container">
+    <div class="profile-form-inner">
+        <form action="{% url 'users:registration' %}" method="post">
+            <input type="hidden" name="rc_action" value="register">
+            <input type="hidden" name="rc_token" value="eae74df618b368908c61c7ad083d54b4">
+
+            <p class="profile-form__title">Регистрация</p>
+            {% csrf_token %}
+            {% for field in form %}
+                {{ field.errors }}
+            <div class="modal-authorization__input">
+                {% if field == form.date_of_birth %}
+                    <label style="opacity: 0.6;font: caption;">Введите дату рождения</label>
+                {% endif %}
+                {{ field }}
+            </div>
+            {% endfor %}
+
+            <div class="modal-registration__button">
+                <button type="submit" class=" button-text-black" data-rc="1">Регистрация</button>
+            </div>
+            <div class="modal-registration__checkbox" style="text-align: center">
+                <input type="checkbox" name="agree" id="modal-registration__checkbox" value="1" checked="checked">
+                <label for="modal-registration__checkbox">Я согласен с условиями передачи информации</label>
+            </div>
+        </form>
+
+        <div class="profile-form__footer">
+            У вас уже есть аккаунт? <a href="{% url 'users:login' %}">Войти</a><br>
+            Забыли пароль? <a href="{% url 'users:password_reset' %}">Восстановите</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

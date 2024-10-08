@@ -1,0 +1,128 @@
+﻿{% extends 'products/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+	    <section class="courses-first" style="background-image: url({{ category.image.url }})">
+        <div class="container">
+            <div class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+			<span class="breadcrumbs__parent" itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+				<a href="{% url 'products:index' %}" itemprop="item"><span itemprop="name">Главная</span></a>
+				<meta itemprop="position" content="1">
+			</span><span class="breadcrumbs__icon"></span>
+							<span class="breadcrumbs__active" itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+								<span itemprop="item"><span itemprop="name">{{ category.name }}</span></span>
+								<meta itemprop="position" content="2">
+							</span></div>
+            <div class="courses-first-flex">
+                <div class="courses-first-name">
+                    {{ category.name }}
+                </div>
+                <div class="courses-first-content">
+                     {{ category.description }}
+                </div>
+
+                            </div>
+        </div>
+    </section>
+
+            <section class="courses page-courses courses-wrap">
+                <div class="courses-block-container active show-true courses-type-3">
+                    {% for product in products %}
+                    <a href="{% url 'products:product_detail' category_slug=category.slug product_slug=product.slug %}" class="courses-block" data-id="{{ product.id }}">
+                        <div class="courses-block-top">
+                            <div class="courses-block__dates"></div>
+                            <div class="courses-block__level">
+                                <div class="courses-block__level-text">Базовый уровень</div>
+                                <span class="active"></span><span class="no-active"></span><span class="no-active"></span>                            </div>
+                        </div>
+
+                        <div class="courses-block-bottom">
+                            <div class="courses-block__title">
+                                {{ product.name }}
+                            </div>
+                            <div class="courses-block__text">
+                                {{ product.description }}
+                            </div>
+                            <div class="courses-block__price">
+                                {{ product.price_czk | floatformat:0 }} Kč / {{ product.price_eur | floatformat:0 }} €
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                            
+            <div class="courses-button-all container" style="display: none">
+                <div class="courses-button-all__button button-text-black courses-show-more-js">Показать еще</div>
+            </div>
+        {% for product in products %}
+        <style>.courses-block[data-id="{{ product.id }}"] {
+                        background-image: url({{ product.image.url }});
+                    }
+                            @media all and (max-width: 767px) {
+                            .courses-block[data-id="{{ product.id }}"] {
+                                background-image: url({{ product.image.url }});
+                            }
+                        }</style>
+        {% endfor %}
+    <section class="faq container">
+        <div class="faq__title text-title container">
+            Об услуге
+        </div>
+        <div class="carousel">
+                <div class="carousel_slides">
+                    {% for carousel_image in carousel_images %}
+                    <div class="carousel_slide">
+                        <img src="{{ carousel_image.image.url }}">
+                    </div>
+                    {% endfor %}
+                    <!-- Добавьте больше слайдов по необходимости -->
+                </div>
+                <button class="carousel_prev">&#10094;</button>
+                <button class="carousel_next">&#10095;</button>
+            </div>
+        </section>
+    </section>
+    <section class="faq container">
+        <div class="faq__title text-title container">
+            Об услуге
+        </div>
+        {% for question in questions %}
+        <div class="faq-container">
+            <div class="faq-block">
+                <div class="faq-block-flex" id="button-faq">
+                    <div class="faq-block__title">
+                        {{ question.question }}                        
+                    </div>
+                <div class="faq-block__img"></div>
+                </div>
+                <div class="faq-block__text">
+                    {{ question.answer | linebreaksbr }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+    <section class="author page-courses">
+        <div class="container">
+            <div class="author__title text-title">Подготовка к услуге</div>
+        </div>
+
+        <div class="author-flex container">
+            <div class="author-content">
+                <div class="author-content__name">Оффлайн</div>
+                <div class="author-content__text">
+                    {{ category.preparation_offline | linebreaksbr }}
+                </div>
+            </div>
+            <div class="author-img">
+                <img class="author-img__photo" src="{{ category.content_image.url }}" alt="">
+            </div>
+            <div class="author-content">
+                <div class="author-content__name">Онлайн</div>
+                <div class="author-content__text">
+                    {{ category.preparation_online | linebreaksbr }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'profile/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block header %}
+    <div class="header-courses">
+        <a href="{% url 'users:user_services' %}" class="header-courses__my-courses no-active button-head-text-black">Мои услуги</a>
+        <a href="{% url 'users:user_guides' %}" class="header-courses__all-courses no-active button-head-text-black">Мои
+            гайды</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <section class="lk-my-profil container">
+        <div class="lk-my-profil__title">
+            Мой профиль
+        </div>
+    </section>
+    <section class="lk-my-profil-content container">
+        <div class="lk-my-profil-content-flex">
+            <div class="lk-my-profil-content-left">
+                <div class="lk-my-profil-content-user">
+                    <div class="lk-my-profil-content-user-img">
+                        {% if user.image %}
+                            <img class="lk-my-profil-content-user-img__img" id="lk-my-profil__img" src="{{ user.image.url }}">
+                        {% endif %}
+                        <label for="lk-my-profil-content-data__input-image" class="lk-my-profil-content-user-img__label"></label>
+                    </div>
+                    <div class="lk-my-profil-content-user-name">
+                        <div class="lk-my-profil-content-user-name__title">
+                            {{ user.first_name }} {{ user.last_name }}
+                        </div>
+                        <div class="lk-my-profil-content-user-name__subtitle">
+                            {{ user.email }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lk-my-profil-content-right">
+                <form action="{% url 'users:profile' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="lk-my-profil-content-data">
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="text-normal" {% if message.tags == 'error' %} style="color: red" {% elif message.tags == 'success' %} style="color: green" {% endif %}>
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        <br>
+                        {% endif %}
+                        <div class="lk-my-profil-content-data__title">
+                            Личные данные
+                        </div>
+                        {% for field in profile_form %}
+                            {% if field != profile_form.image %}
+                                <div class="lk-my-profil-content-data__input">
+                                    {{ field }}
+                                </div>
+                            {% else %}
+                                <div class="lk-my-profil-content-data__input" style="display: none;">
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <button type="submit" class="lk-my-profil-content-data__button button-text-black">Сохранить
+                        </button>
+                    </div>
+                </form>
+
+                    <form method="post" action="{% url 'users:profile' %}">
+                        {% csrf_token %}
+                        <div class="lk-my-profil-content-data">
+                            <div class="lk-my-profil-content-data__title">
+                                Сменить пароль
+                            </div>
+                            {% for field in password_change_form %}
+                            <div class="lk-my-profil-content-data__input">
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="lk-my-profil-content-data__button button-text-black">Подтвердить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </section>
+{% endblock %}

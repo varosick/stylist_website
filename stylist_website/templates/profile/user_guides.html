@@ -1,0 +1,57 @@
+{% extends 'profile/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block header %}
+<div class="header-courses">
+    <a href="{% url 'users:user_services' %}" class="header-courses__my-courses no-active button-head-text-black">Мои услуги</a>
+    <a href="{% url 'users:user_guides' %}" class="header-courses__all-courses no-active button-head-text-black">Мои гайды</a>
+</div>
+{% endblock %}
+{% block content %}
+<section class="my-courses container">
+        <div class="lk-first">
+            <div class="lk-first-flex">
+                <div class="lk-first-title">
+                    Добро пожаловать!
+                </div>
+                <div class="lk-first-text">
+                    Сегодня отличный день, чтобы изменить свой стиль или вдохновиться модой!
+                </div>
+            </div>
+        </div>
+        <div class="my-courses__title">Ваши приобретенные гайды</div>
+            <div class="my-courses-flex">
+                <div class="my-courses-container">
+                    {% for user_guide in user_guides %}
+                    <div class="my-courses-block" style="background-image: url({{ user_guide.guide.image.url }});">
+                        <div class="my-courses-container-top">
+                            <div class="my-courses-container__title">
+                                {{ user_guide.guide.name }}
+                            </div>
+                            <div class="my-courses-container__level">
+                                <div class="my-courses-container__level-text">Базовый уровень</div>
+                                <span class="active"></span><span class="no-active"></span><span class="no-active"></span>								
+                            </div>
+                        </div>
+                        <div class="my-courses-container-bottom">
+                            <div class="my-courses-container__text">
+                                {% if user_guide.payment_status == 0 %}
+                                    Будет доступно после проверки оплаты
+                                {% endif %}
+                            </div>
+                            <progress max="7" value="0"></progress>
+                        </div>
+                        {% if user_guide.payment_status != 0 %}
+                            <a href="{% url 'users:user_guide_detail' user_guide.guide.slug %}" class="full-link"></a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+    <div class="my-courses-button-all">
+        <div class="my-courses-button-all__button button-text-black" id="button-my-courses-show">
+            Показать еще
+        </div>
+    </div>
+	</section>
+{% endblock %}

@@ -1,0 +1,107 @@
+﻿{% extends 'products/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="blog-first">
+    <div class="container">
+        <div class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+        <span class="breadcrumbs__parent" itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="{% url 'products:index' %}" itemprop="item"><span itemprop="name">Главная</span></a>
+            <meta itemprop="position" content="1">
+        </span><span class="breadcrumbs__icon"></span>
+                        <span class="breadcrumbs__active" itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+                            <span itemprop="item"><span itemprop="name">Отзывы</span></span>
+                            <meta itemprop="position" content="2">
+                        </span></div>
+        <div class="blog-first-flex">
+            <div class="blog-first-name">
+               Отзывы
+            </div>
+            <br>
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% else %}
+                <div class="reviews-button-all">
+                    {% if user.is_authenticated %}
+                        <a href="#modal-buy-course" class="courses-buttons__button-buy button-text-black open-modal-js">Оставить отзыв</a>
+                    {% else %}
+                        <a href="{% url 'users:login' %}?next={% url 'users:reviews' %}"
+                           class="courses-buttons__button-buy button-text-black">Оставить отзыв</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="reviews container">
+    <div class="reviews-flex">
+        {% for review in reviews %}
+            <div class="reviews-container">
+                <div class="reviews-container-left">
+                    <div class="reviews-container-left__img">
+                        <img src="{{ review.user.image.url }}">
+                    </div>
+                    <div class="reviews-container-left-con  tent">
+                        <div class="reviews-container-left__name">
+                            {{ review.user.first_name }} {{ review.user.last_name }}
+                        </div>
+                        <div class="reviews-container-left__link">
+                            {{ review.date | date:"d.m.Y"}}
+                        </div>
+                    </div>
+                    </div>
+                    <div class="reviews-container-right">
+                        <div class="reviews-container-right__text">
+                            {{ review.review }}
+                        </div>
+                    </div>
+            </div>
+        {% endfor %}
+        {% for not_user_review in not_user_reviews %}
+                <div class="reviews-container">
+                    <div class="reviews-container-left">
+                        <div class="reviews-container-left__img">
+                            <img src="{{ not_user_review.reviewer_image.url }}">
+                        </div>
+                        <div class="reviews-container-left-con  tent">
+                            <div class="reviews-container-left__name">
+                                {{ not_user_review.reviewer_first_name }} {{ not_user_review.reviewer_last_name }}
+                            </div>
+                            <div class="reviews-container-left__link">
+                                {{ not_user_review.date | date:"d.m.Y"}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class="reviews-container-right">
+                            <div class="reviews-container-right__text">
+                                {{ not_user_review.review }}
+                            </div>
+                        </div>
+                    </div>
+        {% endfor %}
+    </div>
+    <div class="reviews-button-all">
+        <div class="reviews-button-all__button button-text-black" id="button-reviews-show">Показать еще</div>
+    </div>
+    <div id="modal-buy-course" class="zoom-anim-dialog mfp-hide">
+        <div class="modal-content text-center">
+            <p class="modal-title">
+                Оставить отзыв
+            </p>
+            <p class="text-normal mt-4">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <label>Введите текст отзыва</label>
+                    {{ form.review }}
+                    <div class="modal-registration__button">
+                        <button type="submit" class=" button-text-black" data-rc="1">Отправить отзыв</button>
+                    </div>
+                </form>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

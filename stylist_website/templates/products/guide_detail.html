@@ -1,0 +1,73 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <section class="courses-first" style="background-image: url({{ guide.image.url }})">
+        <div class="container">
+            <div class="breadcrumbs" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+			<span class="breadcrumbs__parent" itemscope="" itemprop="itemListElement"
+                  itemtype="http://schema.org/ListItem">
+				<a href="{% url 'products:index' %}" itemprop="item"><span itemprop="name">Главная</span></a>
+				<meta itemprop="position" content="1">
+			</span><span class="breadcrumbs__icon"></span>
+                <span class="breadcrumbs__active" itemscope="" itemprop="itemListElement"
+                      itemtype="http://schema.org/ListItem">
+								<span itemprop="item"><span itemprop="name">{{ guide.name }}</span></span>
+								<meta itemprop="position" content="2">
+							</span></div>
+            <div class="courses-first-flex">
+                <div class="courses-first-name" id="courses-first-name">{{ guide.name }}</div>
+                <div class="courses-first-content">
+                    <div class="courses-first-content-price-wrap">
+                        <div class="courses-first-content-price"
+                             id="courses-first-price">{{ guide.price_czk | floatformat:0 }} Kč / {{ guide.price_eur | floatformat:0 }} €
+                        </div>
+                    </div>
+                </div>
+                <div class="courses-first-content">
+                    {{ guide.description }}
+                </div>
+                <div class="courses-first-buttons">
+                    <div class="courses-buttons page-courses-article">
+                        {% if user.is_authenticated %}
+                            {% if guide.id not in user_guides %}
+                                <a href="#modal-buy-course" class="courses-buttons__button-buy button-text-black open-modal-js">Приобрести</a>
+                            {% else %}
+                                <a href="{% url 'users:user_guides' %}" class="courses-buttons__button-buy button-text-black ">Перейти</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'users:login' %}?next={% url 'products:guide_detail' guide_slug=guide.slug %}"
+                               class="courses-buttons__button-buy button-text-black">Приобрести</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="modal-buy-course" class="zoom-anim-dialog mfp-hide">
+        <div class="modal-content text-center">
+            <p class="modal-title">
+                Приобрести гайд “{{ guide.name }}”
+            </p>
+            <div class="modal-buy__price" data-price="10 000 000 р.">{{ guide.price_czk | floatformat:0 }} CZK</div>
+            <p class="text-normal mt-4">
+            <form action="{% url 'products:guide_detail' guide_slug=guide.slug %}"
+                  method="post">
+                {% csrf_token %}
+                <p class="text-normal">
+                    Произведите оплату
+                    <a href="https://revolut.me/varosick" target="_blank" class="text-underline">
+                        по ссылке
+                    </a>
+                    <br>
+                    <br>
+                    После проверки оплаты услуга будет доступна в Личном кабинете
+                    <br>
+                </p>
+                <div class="modal-registration__button">
+                    <button type="submit" class=" button-text-black" data-rc="1">Подтвердить оплату</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

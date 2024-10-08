@@ -1,0 +1,6 @@
+/.venv/
+/.idea/
+/media/
+/products/__pycache__/
+/users/__pycache__/
+/stylist_website/__pycache__/

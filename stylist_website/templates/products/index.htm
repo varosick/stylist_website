@@ -1,0 +1,175 @@
+﻿{% extends 'products/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <!-- html код -->
+    <section class="home-first">
+        <div class="home-first-flex container">
+            <div class="home-first-name">
+                <img src="{% static 'images/logo-black.svg' %}" alt="Логотип">
+            </div>
+            <div class="home-first-social">
+                <a rel="nofollow" target="_blank" href="https://instagram.com/kallishevich"
+                   class="home-first-social__instagram button-icon-white"></a>
+                <a rel="nofollow" target="_blank" href="https://pinterest.com/kallishevich"
+                   class="home-first-social__tiktok button-icon-white"></a>
+            </div>
+            <div class="home-first-content">
+                Меня зовут Мария, я персональный стилист из Праги
+            </div>
+        </div>
+        <div class="home-first-flex-image">
+            <div class="home-first-flex-image__img">
+                <img src="{% static 'media/IMG_9433.JPG' %}" alt="Изображение 1">
+            </div>
+            <div class="home-first-flex-image__img">
+                <img src="{% static 'media/IMG_9438.JPG' %}" alt="Изображение 2">
+            </div>
+            <div class="home-first-flex-image__img">
+                <img src="{% static 'media/IMG_9437.JPG' %}" alt="Изображение 3">
+            </div>
+        </div>
+    </section>
+
+    <!-- html код -->
+
+    <section class="courses page-courses courses-wrap" id="services">
+        <div class="courses__title text-title container">
+            Услуги
+        </div>
+        <div class="courses-block-container active show-true courses-type-3">
+            {% for category in categories %}
+                <a class="courses-block" href="{% url 'products:category_detail' category_slug=category.slug %}"
+                   data-id="{{ category.id }}">
+                    <div class="courses-block-bottom">
+                        <div class="courses-block__title">
+                            {{ category.name }}
+                        </div>
+                        <div class="courses-block__text">
+                            {{ category.description }}
+                        </div>
+                        <div class="courses-block__price">
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        {% for category in categories %}
+            <style>.courses-block[data-id="{{ category.id }}"] {
+                background-image: url("{{ category.image.url }}");
+            }</style>
+        {% endfor %}
+    </section>
+    <section class="courses page-courses courses-wrap" id="guides">
+        <div class="courses__title text-title container">
+            Гайды
+        </div>
+        <div class="courses-block-container active show-true courses-type-3">
+            {% for guide in guides %}
+                <a class="courses-block background-guide" href="{% url 'products:guide_detail' guide.slug %}"
+                   data-id="{{ guide.id }}">
+                    <div class="courses-block-bottom">
+                        <div class="courses-block__title">
+                            {{ guide.name }}
+                        </div>
+                        <div class="courses-block__text">
+                            {{ guide.description }}
+                        </div>
+                        <div class="courses-block__price">
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        {% for guide in guides %}
+            <style>.background-guide[data-id="{{ guide.id }}"] {
+                background-image: url("{{ guide.image.url }}");
+            }</style>
+        {% endfor %}
+    </section>
+
+    <!-- html код -->
+    <section class="author" id="about_me">
+        <div class="author-flex container">
+            <div class="author-img">
+                <img class="author-img__photo" src="{% static 'media/photo_2024-09-09_12-44-49.jpg' %}"
+                     alt="Мария Соколова">
+            </div>
+            <div class="author-content">
+                <div class="author-content__tag">Стилист, блогер, инфлюенсер</div>
+                <div class="author-content__name">Мария Соколова</div>
+                <div class="author-content-social">
+                    <a target="_blank" rel="nofollow" href="https://instagram.com/kallishevich"
+                       class="author-content-social__instagram button-icon-white"></a>
+                </div>
+                <div class="author-content__text">
+                    "Меня всегда очень радует, когда мои клиенты пишут мне, как просто для них теперь собирать крутые
+                    образы за пару минут после нашей работы над их гардеробом и стилем!"
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Глобальный блок -->
+    <section class="faq container" id="questions">
+        <div class="faq__title text-title container">
+            Частые вопросы
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-block ">
+                <div class="faq-block-flex" id="button-faq">
+                    <div class="faq-block__title">
+                        А можно познакомиться заранее?
+                    </div>
+                    <div class="faq-block__img"></div>
+                </div>
+                <div class="faq-block__text">
+                    Нужно! Всем своим клиентам перед услугой я предлагаю созвон-знакомство, чтобы лучше ознакомиться с
+                    вашим запросом и помочь выбрать нужную услугу, если вы еще не выбрали
+                </div>
+            </div>
+            <div class="faq-block ">
+                <div class="faq-block-flex" id="button-faq">
+                    <div class="faq-block__title">
+                        Как подготовиться к разбору гардероба?
+                    </div>
+                    <div class="faq-block__img"></div>
+                </div>
+                <div class="faq-block__text">
+                    После внесения предоплаты вам нужно будет заполнить небольшую анкету-знакомство, прислать селфи и
+                    фото фигуры. Об этом я обязательно также подробно расскажу после внесения предоплаты
+                    Перед разбором желательно вытащить все вещи из шкафа и разложить на кровати по сегментам (верха и
+                    плечевые изделия, низы, обувь, сумки, аксессуары и верхняя одежда). Это нужно для того, чтобы мы не
+                    тратили на это время на самом разборе. Желательно, чтобы в комнате было зеркало
+                </div>
+            </div>
+            <div class="faq-block ">
+                <div class="faq-block-flex" id="button-faq">
+                    <div class="faq-block__title">
+                        Можно ли заказать услугу, если я не из Праги?
+                    </div>
+                    <div class="faq-block__img"></div>
+                </div>
+                <div class="faq-block__text">
+                    Конечно, все свои услуги я провожу как в offline, так и online формате. Подробнее о ходе работы в
+                    каждом формате вы можете узнать в разделе «Услуги»
+                </div>
+            </div>
+            <div class="faq-block ">
+                <div class="faq-block-flex" id="button-faq">
+                    <div class="faq-block__title">
+                        Что делать, если я не понимаю, какая услуга мне подходит?
+                    </div>
+                    <div class="faq-block__img"></div>
+                </div>
+                <div class="faq-block__text">
+                    Ничего страшного! Я провожу бесплатную 15-минутную консультацию-созвон, где вы можете поделиться
+                    своим запросом и мы вместе определимся, какая услуга подходит вам больше!
+                    Мы также можем решить эту проблему в Директ
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

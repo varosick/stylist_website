@@ -1,0 +1,30 @@
+﻿{% extends 'profile/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+		<div class="profile-form-container">
+            <div class="profile-form-inner">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="text-normal text-center" {% if message.tags == 'error' %} style="color: red" {% elif message.tags == 'success' %} style="color: green" {% endif %}>
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <p class="profile-form__title">Восстановление пароля</p>
+                    <div class="modal-recovery__input">
+                        {{ form.email }}
+                    </div>
+                    <div class="modal-recovery__button">
+                        <button type="submit" class="button-text-black">Восстановить пароль</button>
+                    </div>
+                </form>
+                <div class="profile-form__footer">
+                    Нет аккаунта? <a href="{% url 'users:registration' %}">Зарегистрируйтесь</a><br>
+                    У вас уже есть аккаунт? <a href="{% url 'users:login' %}">Войти</a>
+                </div>
+            </div>
+	    </div>
+{% endblock %}

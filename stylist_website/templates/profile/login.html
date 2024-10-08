@@ -1,0 +1,35 @@
+﻿{% extends 'profile/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="profile-form-container">
+    <div class="profile-form-inner">
+        <form action="{% url 'users:login' %}" method="post">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="text-normal text-center" {% if message.tags == 'error' %} style="color: red" {% elif message.tags == 'success' %} style="color: green" {% endif %}>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            <br>
+            {% endif %}
+            <p class="profile-form__title">Войти</p>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="modal-authorization__input">
+                {{ field.errors }}
+                {{ field }}
+            </div>
+            {% endfor %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <div class="modal-authorization__button">
+                <button type="submit" class="button-text-black">Войти</button>
+            </div>
+        </form>
+        <div class="profile-form__footer">
+            Нет аккаунта? <a href="{% url 'users:registration' %}">Зарегистрируйтесь</a><br>
+            Забыли пароль? <a href="{% url 'users:password_reset' %}">Восстановите</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

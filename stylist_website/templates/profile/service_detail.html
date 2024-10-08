@@ -1,0 +1,56 @@
+{% extends 'profile/base.html' %}
+{% load static %}
+{% block title %}{{ title }}{% endblock %}
+{% block header %}
+<div class="header-courses">
+    <a href="{% url 'users:user_services' %}" class="header-courses__my-courses no-active button-head-text-black">Мои услуги</a>
+    <a href="{% url 'users:user_guides' %}" class="header-courses__all-courses no-active button-head-text-black">Мои гайды</a>
+</div>
+{% endblock %}
+{% block content %}
+	    <section class="lk-video container">
+        <div class="lk-video-first">
+            <a href="{% url 'users:user_services' %}" class="lk-video-first__prev">
+                <div class="lk-video-first__prev__button button-icon-black"></div>
+                <div class="lk-video-first__prev__text">Мои курсы</div>
+			</a>
+        </div>
+    </section>
+
+	<section class="lk-open-course container">
+        <div class="lk-open-course-flex">
+            <div class="lk-open-course-left">
+                <div class="lk-open-course-container">
+                    <div class="lk-open-course-block" style="background-image: url({{ user_service.service.image.url }});">
+                        <div class="lk-open-course-container-top">
+                            <div class="lk-open-course-container__title">
+                                {{ user_service.service.category.name }}
+                                <br>
+                                Тариф: {{ user_service.service.name }}                            
+                            </div>
+                        </div>
+                        <div class="lk-open-course-container-bottom">
+                            <div class="lk-open-course-container__text">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lk-open-course-right">
+                
+                <div class="modal-lk-content-block-point">
+                    <div class="modal-lk-content-block-point__content">
+                        {% if user_service.gdrive_file_url %}
+                            <iframe src="{{ user_service.gdrive_file_url }}" width="100%" height="650px" allow="autoplay"></iframe>
+                        {% endif %}
+                        <div class="lk-video-content__video">
+                            <div class="lk-video-content__video__title">Обучение на стилиста с нуля</div>
+                            <a href="#" class="full-link"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
