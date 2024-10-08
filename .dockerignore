@@ -1,0 +1,5 @@
+/stylist_website/.venv
+/stylist_website/.idea
+.idea
+*/Dockerfile*
+.dockerignore

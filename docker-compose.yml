@@ -1,0 +1,60 @@
+services:
+  django-app:
+    build:
+      context: ./stylist_website
+    command: gunicorn stylist_website.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres-db
+      - redis
+      - celery
+    env_file:
+      - .env
+    volumes:
+      - static_data:/stylist_website/static
+
+  postgres-db:
+    image: postgres:latest
+    container_name: postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_DB=${SQL_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgres/data/
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+  celery:
+    build:
+      context: ./stylist_website
+    command: celery -A stylist_website worker -l INFO -P solo
+    depends_on:
+      - redis
+      - postgres-db
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_data:/stylist_website/static
+    ports:
+      - "80:80"
+    depends_on:
+      - django-app
+
+volumes:
+  pg_data:
+  static_data:
