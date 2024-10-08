@@ -82,6 +82,9 @@ class CategoryDetailView(ListView):
 
 
 class ProductDetailView(FormMixin, DetailView):
+    """
+        Отображение детального представления каждой услуги. Обработка формы записи на услугу от клиента.
+    """
     model = Product
     template_name = 'products/product_detail.html'
     form_class = ServicePurchaseForm
