@@ -13,6 +13,7 @@ services:
       - .env
     volumes:
       - static_data:/stylist_website/static
+      - static_media:/stylist_website/media
 
   postgres-db:
     image: postgres:latest
@@ -50,6 +51,7 @@ services:
     build: ./nginx
     volumes:
       - static_data:/stylist_website/static
+      - static_media:/stylist_website/media
     ports:
       - "80:80"
     depends_on:
@@ -58,3 +60,4 @@ services:
 volumes:
   pg_data:
   static_data:
+  static_media:

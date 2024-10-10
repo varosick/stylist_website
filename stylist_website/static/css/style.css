@@ -2606,17 +2606,17 @@ a:focus {
 }
 
 .home-first-social__tiktok::before {
-    content: url(../images/icon-tiktok-black.svg);
+    content: url(../images/icon-telegram-black.svg);
     display: block;
 }
 
 .home-first-social__tiktok:hover::before {
-    content: url(../images/icon-tiktok-white.svg);
+    content: url(../images/icon-telegram-white.svg);
     display: block;
 }
 
 .home-first-social__tiktok:active::before {
-    content: url(../images/icon-tiktok-white.svg);
+    content: url(../images/icon-telegram-white.svg);
     display: block;
 }
 
@@ -6419,17 +6419,17 @@ a:focus {
 }
 
 .footer-social__youtube::before {
-    content: url(../images/icon-youtube-white-footer.svg);
+    content: url(../images/icon-telegram-white.svg);
     display: block;
 }
 
 .footer-social__youtube:hover::before {
-    content: url(../images/icon-youtube-black-footer.svg);
+    content: url(../images/icon-telegram-white.svg);
     display: block;
 }
 
 .footer-social__youtube:active::before {
-    content: url(../images/icon-youtube-black-footer.svg);
+    content: url(../images/icon-telegram-white.svg);
     display: block;
 }
 
@@ -6953,8 +6953,7 @@ footer.page-profile-form {
 
 
 /* responsive */
-@media (min-width: 480px) and (max-width: 1300px) {
-
+@media (min-width: 480px) and (max-width: 767px) {
     .header {
         font-size: 15px;
     }
@@ -7186,10 +7185,14 @@ footer.page-profile-form {
     }
 }
 
-@media (min-width: 768px) and (max-width: 1300px) {
+@media (min-width: 481px) and (max-width: 1300px) {
     body {
         font-size: 18px;
         line-height: 40px;
+    }
+
+    .modal-lk-out-lk__logo img {
+        width: 250px;
     }
 
     .modal-menu__logo img {
@@ -10600,15 +10603,15 @@ footer.page-profile-form {
         display: block;
     }
     .home-first-social__tiktok::before {
-        content: url(../images/icon-tiktok-white.svg);
+        content: url(../images/icon-telegram-white.svg);
         display: block;
     }
     .home-first-social__tiktok:hover::before {
-        content: url(../images/icon-tiktok-black.svg);
+        content: url(../images/icon-telegram-black.svg);
         display: block;
     }
     .home-first-social__tiktok:active::before {
-        content: url(../images/icon-tiktok-black.svg);
+        content: url(../images/icon-telegram-black.svg);
         display: block;
     }
     .home-first-name {

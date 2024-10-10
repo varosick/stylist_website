@@ -21,6 +21,7 @@
         </div>
         <div class="my-courses__title">Ваши приобретенные гайды</div>
             <div class="my-courses-flex">
+                {% if user_guides %}
                 <div class="my-courses-container">
                     {% for user_guide in user_guides %}
                     <div class="my-courses-block" style="background-image: url({{ user_guide.guide.image.url }});">
@@ -47,11 +48,15 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% else %} 
+                    <p>Упс... Тут пока ничего. Скорее выбирай <a class="text-underline" href="{% url 'products:index' %}#guides">гайд</a>
+                    </p>
+                {% endif %}
             </div>
-    <div class="my-courses-button-all">
-        <div class="my-courses-button-all__button button-text-black" id="button-my-courses-show">
-            Показать еще
-        </div>
-    </div>
+{#    <div class="my-courses-button-all">#}
+{#        <div class="my-courses-button-all__button button-text-black" id="button-my-courses-show">#}
+{#            Показать еще#}
+{#        </div>#}
+{#    </div>#}
 	</section>
 {% endblock %}

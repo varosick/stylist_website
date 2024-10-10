@@ -46,7 +46,6 @@ class UserServices(models.Model):
     gdrive_file_url = models.URLField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # Получаем старый объект из базы, если он существует
         if self.pk:
             old_instance = UserServices.objects.get(pk=self.pk)
             old_payment_status = old_instance.payment_status
@@ -109,7 +108,6 @@ class UserGuides(models.Model):
     payment_status = models.IntegerField(default=0, choices=Payment)
 
     def save(self, *args, **kwargs):
-        # Получаем старый объект из базы, если он существует
         if self.pk:
             old_instance = UserGuides.objects.get(pk=self.pk)
             old_payment_status = old_instance.payment_status
@@ -174,7 +172,9 @@ class EmailVerification(models.Model):
         link = reverse('users:email_verify', kwargs={'email': self.user.email, 'code': self.code})
         verify_link = f'{settings.DOMAIN_NAME}{link}'
         subject = f'Подтверждение адреса электронной почты для пользователя {self.user.username}'
-        message = f'Привет, {self.user.first_name}, это я Маша. Рада тебя видеть на моем сайте. Для подтверждения электронной почты переходи по ссылке: {verify_link}'
+        message = (f'''Привет, {self.user.first_name}, это Ваш персональный стилист Маша! Спасибо Вам за регистрацию, она прошла успешна! Для подтверждения электронной почты переходи по ссылке: {verify_link} 
+        Теперь у Вас есть свой личный профиль, где Вы найдете все купленные Вами услуги и гайды, а также все файлы, которые я подготовлю для Вас
+        Если будут вопросы, не стесняйтесь, пишите мне в Директ инстаграм (@kallishevich) или в телеграмм (@kallishevich) ) Мне не терпится начать нашу работу!. ''')
         send_mail(
             subject=subject,
             message=message,
