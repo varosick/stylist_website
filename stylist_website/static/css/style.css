@@ -3795,6 +3795,9 @@ a:focus {
     width: 100%;
     height: 100%;
     margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .my-courses-container.show-true {
@@ -7186,6 +7189,10 @@ footer.page-profile-form {
 }
 
 @media (min-width: 481px) and (max-width: 1300px) {
+    .my-courses-block {
+        height: 300px;
+        width: 100%;
+    }
     body {
         font-size: 18px;
         line-height: 40px;

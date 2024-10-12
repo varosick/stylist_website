@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.db import models
 from django.urls import reverse
-from django.utils.timezone import now
 
 from products.models import Guide, Product
 
@@ -46,21 +45,25 @@ class UserServices(models.Model):
     gdrive_file_url = models.URLField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
+        """
+        Overrides the save method to send email to the user after a change in payment status
+        """
         if self.pk:
             old_instance = UserServices.objects.get(pk=self.pk)
             old_payment_status = old_instance.payment_status
         else:
             old_payment_status = None
 
-        # Вызов стандартного метода save
         super().save(*args, **kwargs)
 
-        # Если payment_status изменился, выполняем логику отправки email
+        # f payment_status has changed, execute the logic of sending email
         if old_payment_status is not None and old_payment_status != self.payment_status:
             self.send_payment_status_email()
 
     def send_payment_status_email(self):
-        # Логика отправки email
+        """
+        Sending an email to a user when the payment status changes
+        """
         subject = 'Изменение статуса оплаты'
         message = f'Статус оплаты вашей услуги "{self.service}" изменен на {self.get_payment_status_display()}.'
         send_mail(
@@ -75,6 +78,9 @@ class UserServices(models.Model):
         return f'{self.user.username} {self.service}'
 
     def send_email_to_user(self):
+        """
+        Sending an e-mail to the user after successful purchase of the service
+        """
         subject = f'Спасибо за покупку услуги {self.service.name} {self.service.category.name}'
         message = f'Привет, {self.user.first_name}, это я Маша. Спасибо за покупку услуги! После проверки оплаты тебе придет мейл и услуга будет доступна в личном кабинете'
         send_mail(
@@ -86,6 +92,9 @@ class UserServices(models.Model):
         )
 
     def send_email_to_stylist(self):
+        """
+        Sending an e-mail to the stylist after successful purchase of the service
+        """
         subject = f'Покупка услуги {self.service.name} {self.service.category.name}'
         message = f'{self.user.first_name} {self.user.last_name} приобрел услугу. Нужно проверить оплату'
         send_mail(
@@ -108,6 +117,9 @@ class UserGuides(models.Model):
     payment_status = models.IntegerField(default=0, choices=Payment)
 
     def save(self, *args, **kwargs):
+        """
+        Overrides the save method to send email to the user after a change in payment status
+        """
         if self.pk:
             old_instance = UserGuides.objects.get(pk=self.pk)
             old_payment_status = old_instance.payment_status
@@ -117,11 +129,14 @@ class UserGuides(models.Model):
         # Вызов стандартного метода save
         super().save(*args, **kwargs)
 
-        # Если payment_status изменился, выполняем логику отправки email
+        # If payment_status has changed, execute the logic of sending email
         if old_payment_status is not None and old_payment_status != self.payment_status:
             self.send_payment_status_email()
 
     def send_payment_status_email(self):
+        """
+        Sending an email to a user when the payment status changes
+        """
         subject = 'Изменение статуса оплаты'
         message = f'Статус оплаты вашей услуги "{self.guide}" изменен на {self.get_payment_status_display()}.'
         send_mail(
@@ -136,6 +151,9 @@ class UserGuides(models.Model):
         return f'{self.user.username} {self.guide}'
 
     def send_email_to_user(self):
+        """
+        Sending an e-mail to the user after successful purchase of the guide
+        """
         subject = f'Спасибо за покупку гайда {self.guide.name}'
         message = f'Привет, {self.user.first_name}, это я Маша. Спасибо за покупку гайда! После проверки оплаты тебе прийдет мейл и гайд будет доступен в личном кабинете'
         send_mail(
@@ -147,6 +165,9 @@ class UserGuides(models.Model):
         )
 
     def send_email_to_stylist(self):
+        """
+        Sending an e-mail to the stylist after successful purchase of the guide
+        """
         subject = f'Покупка гайда {self.guide.name} '
         message = f'{self.user.first_name} {self.user.last_name} приобрел гайд. Нужно проверить оплату'
         send_mail(
@@ -162,13 +183,14 @@ class EmailVerification(models.Model):
     code = models.UUIDField(unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    expiration = models.DateTimeField()
 
     def __str__(self):
         return f'Email verification for {self.user.email}'
 
-
     def send_verification_email(self):
+        """
+        Sending an e-mail to the user to confirm the mail
+        """
         link = reverse('users:email_verify', kwargs={'email': self.user.email, 'code': self.code})
         verify_link = f'{settings.DOMAIN_NAME}{link}'
         subject = f'Подтверждение адреса электронной почты для пользователя {self.user.username}'
@@ -182,7 +204,4 @@ class EmailVerification(models.Model):
             recipient_list=[self.user.email],
             fail_silently=False,
         )
-
-    def is_expired(self):
-        return True if now() >= self.expiration else False
 

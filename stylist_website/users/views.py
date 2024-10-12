@@ -214,7 +214,7 @@ class EmailVerificationView(TemplateView):
         code = kwargs['code']
         user = User.objects.get(email=kwargs['email'])
         email_verification = EmailVerification.objects.filter(user=user, code=code)
-        if email_verification.exists() and not email_verification.first().is_expired():
+        if email_verification.exists():
             user.is_verified_email = True
             user.save()
             return super(EmailVerificationView, self).get(request, *args, **kwargs)

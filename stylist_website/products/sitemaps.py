@@ -11,14 +11,12 @@ class CategorySitemap(Sitemap):
         return ProductCategory.objects.all()
 
 
-
 class ProductSitemap(Sitemap):
     changefreq = 'monthly'
     priority = 0.9
 
     def items(self):
         return Product.objects.all()
-
 
 
 class GuideSitemap(Sitemap):

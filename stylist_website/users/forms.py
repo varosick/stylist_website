@@ -1,7 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import (AuthenticationForm, PasswordChangeForm,
-                                       PasswordResetForm, SetPasswordForm,
-                                       UserCreationForm)
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UserCreationForm
 from tempus_dominus.widgets import DateTimePicker
 
 from users.models import Review, ScheduleDate, User, UserServices
@@ -9,6 +7,9 @@ from users.tasks import send_email_verification
 
 
 class UserLoginForm(AuthenticationForm):
+    """
+    Logging form inherited from the off-the-shelf Django AuthenticationForm
+    """
     username = forms.CharField(widget=forms.TextInput(attrs={
         'type': "text",
         'name': "username",
@@ -28,6 +29,9 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegistrationForm(UserCreationForm):
+    """
+    Registration form inherited from the off-the-shelf Django UserCreationForm
+    """
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={
             'type': "text",
@@ -96,25 +100,16 @@ class UserRegistrationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super(UserRegistrationForm, self).save(commit=True)
+
+        # Delayed sending of an email to confirm registration with Celery
         send_email_verification.delay(user.id)
         return user
 
 
-
-class ReviewForm(forms.ModelForm):
-    review = forms.CharField(widget=forms.TextInput(attrs={
-        'type': "text",
-        'id': "modal-callback__input-name",
-        'name': "name",
-        'placeholder': "Введите текст отзыва",
-    })
-    )
-    class Meta:
-        model = Review
-        fields = ['review']
-
-
 class UserProfileForm(forms.ModelForm):
+    """
+    Form for displaying user data in the profile
+    """
     first_name = forms.CharField(
         widget=forms.TextInput(attrs={
             'type': "text",
@@ -182,6 +177,9 @@ class UserProfileForm(forms.ModelForm):
 
 
 class ServicePurchaseForm(forms.ModelForm):
+    """
+    Service purchase form with tempus_dominus connection to display a custom calendar
+    """
     datetime_of_service = forms.DateTimeField(widget=DateTimePicker(options={
         'format': 'YYYY-MM-DD HH:mm',
         'useCurrent': False,
@@ -203,14 +201,18 @@ class ServicePurchaseForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        # Updates available dates before loading the form
         self.fields['datetime_of_service'].widget.js_options['enabledDates'] = list(map(lambda x: x.strftime("%Y-%m-%d"), ScheduleDate.objects.filter(is_booked=False).values_list('date', flat=True)))
 
 
 
 class ReviewAddForm(forms.ModelForm):
+    """
+    Form for adding user review
+    """
     review = forms.CharField(widget=forms.Textarea(attrs={
-        'style': 'width: 100%; resize: none;',  # Устанавливаем ширину текстового поля
-        'rows': 10,  # По желанию: количество строк
+        'style': 'width: 100%; resize: none;',
+        'rows': 10,
     }))
     class Meta:
         model = Review
@@ -218,6 +220,9 @@ class ReviewAddForm(forms.ModelForm):
 
 
 class CustomPasswordChangeForm(PasswordChangeForm):
+    """
+    Password change form inherited from PasswordChangeForm
+    """
     new_password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'placeholder': 'Новый пароль',
@@ -238,6 +243,9 @@ class CustomPasswordChangeForm(PasswordChangeForm):
     )
 
 class UserForgotPasswordForm(PasswordResetForm):
+    """
+    Form for sending an e-mail about password change
+    """
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'type': "email",
@@ -249,7 +257,7 @@ class UserForgotPasswordForm(PasswordResetForm):
 
 class UserSetNewPasswordForm(SetPasswordForm):
     """
-    Изменение пароля пользователя после подтверждения
+    Form for changing user password after confirmation
     """
     new_password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={

@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.urls import path
 
 from users.views import (EmailVerificationView, UserForgotPasswordView,
@@ -21,5 +20,4 @@ urlpatterns = [
     path('profile/my_guides/', UserGuidesView.as_view(), name='user_guides'),
     path('profile/my_guides/<slug:guide_slug>', UserGuideDetailView.as_view(), name='user_guide_detail'),
     path('profile/email_verify/<str:email>/<uuid:code>/', EmailVerificationView.as_view(), name='email_verify'),
-
     ]

@@ -1,5 +1,3 @@
-from itertools import product
-
 from django.db import models
 
 
@@ -45,8 +43,10 @@ class Product(models.Model):
 class Question(models.Model):
     question = models.TextField(null=False, blank=False)
     answer = models.TextField(null=False, blank=False)
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(to=ProductCategory, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.question}'
 
 class ProductDetail(models.Model):
     title = models.CharField(max_length=128)
@@ -55,7 +55,7 @@ class ProductDetail(models.Model):
     is_include = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'Описание для {self.product.name} {self.product.category.name} с заголовком {self.title} включено: {self.is_include}'
+        return self.title
 
 
 class Guide(models.Model):
@@ -80,4 +80,7 @@ class NotUserReview(models.Model):
     reviewer_image = models.ImageField(upload_to='media/products/reviews/users_images', null=False, blank=False)
     review = models.TextField(blank=False, null=False)
     date = models.DateField()
+
+    def __str__(self):
+        return f'{self.reviewer_first_name} {self.reviewer_last_name}'
 

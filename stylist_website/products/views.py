@@ -14,7 +14,7 @@ from users.tasks import send_emails_guides, send_emails_services
 
 def tr_handler404(request, exception):
     """
-    Обработка ошибки 404
+    Error 404 handling
     """
     return render(request=request, template_name='errors/error_page.html', status=404, context={
         'title': 'Страница не найдена: 404',
@@ -24,7 +24,7 @@ def tr_handler404(request, exception):
 
 def tr_handler500(request):
     """
-    Обработка ошибки 500
+    Error 500 handling
     """
     return render(request=request, template_name='errors/error_page.html', status=500, context={
         'title': 'Ошибка сервера: 500',
@@ -34,7 +34,7 @@ def tr_handler500(request):
 
 def tr_handler403(request, exception):
     """
-    Обработка ошибки 403
+    Error 403 handling
     """
     return render(request=request, template_name='errors/error_page.html', status=403, context={
         'title': 'Ошибка доступа: 403',
@@ -44,7 +44,7 @@ def tr_handler403(request, exception):
 
 class IndexView(ListView):
     """
-    Отображение главной страницы с категориями услуг и гайдами.
+    Display home page with service categories and guides.
     """
     model = ProductCategory
     template_name = 'products/index.htm'
@@ -62,7 +62,7 @@ class IndexView(ListView):
 
 class CategoryDetailView(ListView):
     """
-    Отображение детального представления каждой категории услуг со всем списком, относящихся услуг.
+    Display a detailed view of each service category with the entire list of related services.
     """
     template_name = 'products/category_detail.html'
     model = Product
@@ -84,7 +84,7 @@ class CategoryDetailView(ListView):
 
 class ProductDetailView(FormMixin, DetailView):
     """
-        Отображение детального представления каждой услуги. Обработка формы записи на услугу от клиента.
+    Displaying a detailed view of each service. Processing of ServicePurchaseForm from a customer.
     """
     model = Product
     template_name = 'products/product_detail.html'
@@ -104,7 +104,7 @@ class ProductDetailView(FormMixin, DetailView):
         return context_data
 
     def post(self, request, *args, **kwargs):
-        # Получаем объект продукта, к которому относится форма
+        # Processing a form in a post request
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
@@ -113,12 +113,12 @@ class ProductDetailView(FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        # Сохраняем данные формы, создавая новый объект UserServices
+        # Save the form data by creating a new UserServices object
         service_purchase = form.save(commit=False)
-        service_purchase.user = self.request.user  # Привязываем пользователя
+        service_purchase.user = self.request.user
         service_purchase.service = self.object
 
-        # Проверяем наличие даты в ScheduleDate
+        #Check for a date in ScheduleDate
         if service_purchase.datetime_of_service:
             try:
                 sd = ScheduleDate.objects.get(date=service_purchase.datetime_of_service.strftime("%Y-%m-%d"))
@@ -128,17 +128,22 @@ class ProductDetailView(FormMixin, DetailView):
                 sd.is_booked = True
                 sd.save()
             except ScheduleDate.DoesNotExist:
-                # Если даты нет в ScheduleDate, возвращаем ошибку
+                # If the date is not in ScheduleDate, return an error
                 form.add_error('datetime_of_service', 'Вы выбрали неправильную дату. Выберите доступную в календаре.')
                 return self.form_invalid(form)
 
-        # Привязываем продукт
         service_purchase.save()
+
+        #Delayed sending of an email using Celery
         send_emails_services.delay(service_purchase.id)
+
         return super().form_valid(form)
 
 
 class GuideDetailView(DetailView):
+    """
+    Display detailed information about the guide. Processing the purchasing a guide
+    """
     model = Guide
     template_name = 'products/guide_detail.html'
     context_object_name = 'guide'
@@ -154,6 +159,9 @@ class GuideDetailView(DetailView):
         return context_data
 
     def post(self, request, *args, **kwargs):
+        """
+        When submitting a post request, we create a record of the purchase of the guide
+        """
         guide = self.get_object()
         user = request.user
 
@@ -163,5 +171,7 @@ class GuideDetailView(DetailView):
             guide=guide
         )
         user_guide.save()
+
+        #Delayed sending of an email using Celery
         send_emails_guides.delay(user_guide.id)
         return redirect('users:user_guides')
