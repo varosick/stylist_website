@@ -64,8 +64,14 @@ class UserServices(models.Model):
         """
         Sending an email to a user when the payment status changes
         """
-        subject = 'Изменение статуса оплаты'
-        message = f'Статус оплаты вашей услуги "{self.service}" изменен на {self.get_payment_status_display()}.'
+        subject = f'Подтверждение внесение предоплаты услуги {self.service.name} {self.service.category.name}'
+        message = f'''Привет, {self.user.first_name}, это Ваш персональный стилист Маша! 
+
+Спасибо Вам за внесение предоплаты! Оплата прошла успешно и теперь дата зарезервирована за Вами! 
+
+Скоро я пришлю всю информацию по подготовке к услуге Вам в Директ в Инстаграм, так что не забываете проверять сообщения 
+
+Если будут вопросы, не стесняйтесь, пишите мне в Директ Инстаграм @kallishevich или в Телеграмм @kallishevich'''
         send_mail(
             subject=subject,
             message=message,
@@ -82,7 +88,17 @@ class UserServices(models.Model):
         Sending an e-mail to the user after successful purchase of the service
         """
         subject = f'Спасибо за покупку услуги {self.service.name} {self.service.category.name}'
-        message = f'Привет, {self.user.first_name}, это я Маша. Спасибо за покупку услуги! После проверки оплаты тебе придет мейл и услуга будет доступна в личном кабинете'
+        message = f'''Привет, {self.user.first_name}, это я Маша. Спасибо Вам за резервацию и внесение предоплаты! 
+
+В течение 48 часов я проверю вашу оплату
+
+После этого, я пришлю Вам всю информацию о подготовке к услуге в Директ Инстаграмм, так что не забывайте проверять сообщения! 
+
+Я также напомню Вам за день до назначенной даты о нашей предстоящей встрече!
+
+Если будут вопросы, не стесняйтесь, пишите мне в Директ Инстаграм @kallishevich или в Телеграмм @kallishevich
+
+Спасибо Вам за доверие!'''
         send_mail(
             subject=subject,
             message=message,
@@ -96,7 +112,9 @@ class UserServices(models.Model):
         Sending an e-mail to the stylist after successful purchase of the service
         """
         subject = f'Покупка услуги {self.service.name} {self.service.category.name}'
-        message = f'{self.user.first_name} {self.user.last_name} приобрел услугу. Нужно проверить оплату'
+        message = f'''{self.user.first_name} {self.user.last_name} ({self.user.username}) приобрел услугу {self.service.name} {self.service.category.name}. 
+        Нужно проверить предоплату по ссылке, вся подробная информация там же: {settings.DOMAIN_NAME}/admin/users/userservices/{self.id}/change . Ссылки для связи inst: {self.user.inst_link}, tg: {self.user.tg_link}
+        '''
         send_mail(
             subject=subject,
             message=message,
@@ -137,8 +155,11 @@ class UserGuides(models.Model):
         """
         Sending an email to a user when the payment status changes
         """
-        subject = 'Изменение статуса оплаты'
-        message = f'Статус оплаты вашей услуги "{self.guide}" изменен на {self.get_payment_status_display()}.'
+        subject = f'Подтверждение оплаты гайда {self.guide.name}'
+        message = f'''Привет, {self.user.first_name}, это Ваш персональный стилист Маша! 
+Спасибо Вам за покупку моего гайда! Оплата прошла успешно и теперь он доступен в вашем личном кабинете в разделе «Мои гайды»
+
+Если будут вопросы, не стесняйтесь, пишите мне в Директ Инстаграм @kallishevich или в Телеграмм @kallishevich'''
         send_mail(
             subject=subject,
             message=message,
@@ -155,7 +176,13 @@ class UserGuides(models.Model):
         Sending an e-mail to the user after successful purchase of the guide
         """
         subject = f'Спасибо за покупку гайда {self.guide.name}'
-        message = f'Привет, {self.user.first_name}, это я Маша. Спасибо за покупку гайда! После проверки оплаты тебе прийдет мейл и гайд будет доступен в личном кабинете'
+        message = f'''Привет, {self.user.first_name}, это я Маша. 
+Спасибо Вам за доверие и покупку моего гайда! Я очень старалась сделать его максимально полноценным и полезным для Вас! 
+        
+После проверки вашей оплаты он станет доступным в Вашем личном кабинете в разделе «мои гайды»
+Проверка занимает до 48 часов
+
+Если будут вопросы, не стесняйтесь, пишите мне в Директ Инстаграм @kallishevich или в Телеграмм @kallishevich'''
         send_mail(
             subject=subject,
             message=message,
@@ -168,8 +195,10 @@ class UserGuides(models.Model):
         """
         Sending an e-mail to the stylist after successful purchase of the guide
         """
-        subject = f'Покупка гайда {self.guide.name} '
-        message = f'{self.user.first_name} {self.user.last_name} приобрел гайд. Нужно проверить оплату'
+        subject = f'Покупка гайда {self.guide.name}'
+        message = f'''{self.user.first_name} {self.user.last_name} ({self.user.username}) приобрел гайд. 
+Нужно проверить оплату и подтвердить по ссылке: {settings.DOMAIN_NAME}/admin/users/userguides/{self.id}/change/
+Ссылки для связи inst: {self.user.inst_link}, tg: {self.user.tg_link}'''
         send_mail(
             subject=subject,
             message=message,
@@ -194,9 +223,14 @@ class EmailVerification(models.Model):
         link = reverse('users:email_verify', kwargs={'email': self.user.email, 'code': self.code})
         verify_link = f'{settings.DOMAIN_NAME}{link}'
         subject = f'Подтверждение адреса электронной почты для пользователя {self.user.username}'
-        message = (f'''Привет, {self.user.first_name}, это Ваш персональный стилист Маша! Спасибо Вам за регистрацию, она прошла успешна! Для подтверждения электронной почты переходи по ссылке: {verify_link} 
-        Теперь у Вас есть свой личный профиль, где Вы найдете все купленные Вами услуги и гайды, а также все файлы, которые я подготовлю для Вас
-        Если будут вопросы, не стесняйтесь, пишите мне в Директ инстаграм (@kallishevich) или в телеграмм (@kallishevich) ) Мне не терпится начать нашу работу!. ''')
+        message = (f'''Привет, {self.user.first_name}, это Ваш персональный стилист Маша! 
+        
+Спасибо Вам за регистрацию, она прошла успешна! Для подтверждения электронной почты переходи по ссылке: {verify_link}
+        
+Теперь у Вас есть свой личный профиль, где Вы найдете все приобретенные Вами услуги и гайды, которые я подготовлю для Вас.
+Если будут вопросы, не стесняйтесь, пишите мне в Директ инстаграм @kallishevich или в телеграмм @kallishevich. 
+        
+Мне не терпится начать нашу работу!. ''')
         send_mail(
             subject=subject,
             message=message,
