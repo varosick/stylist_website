@@ -12,7 +12,7 @@
         <div class="lk-video-first">
             <a href="{% url 'users:user_services' %}" class="lk-video-first__prev">
                 <div class="lk-video-first__prev__button button-icon-black"></div>
-                <div class="lk-video-first__prev__text">Мои курсы</div>
+                <div class="lk-video-first__prev__text">Мои услуги</div>
 			</a>
         </div>
     </section>
@@ -38,16 +38,20 @@
                 </div>
             </div>
             <div class="lk-open-course-right">
-                
                 <div class="modal-lk-content-block-point">
                     <div class="modal-lk-content-block-point__content">
                         {% if user_service.gdrive_file_url %}
                             <iframe src="{{ user_service.gdrive_file_url }}" width="100%" height="650px" allow="autoplay"></iframe>
+                            <div class="after_thanks">
+                                Я очень рада, что мы поработали вместе. По <a class="text-underline" href="{% url 'users:reviews' %}">ссылке</a> можете оставить отзыв. Мне будет очень приятно
+                            </div>
+                        {% else %}
+                            {% if user_service.status == 'offline' %}
+                                <iframe src="{{ user_service.service.category.gdrive_img_offline }}" width="100%" height="703px" allow="autoplay"></iframe>
+                            {% else %}
+                                <iframe src="{{ user_service.service.category.gdrive_img_online }}" width="100%" height="703px" allow="autoplay"></iframe>
+                            {% endif %}
                         {% endif %}
-{#                        <div class="lk-video-content__video">#}
-{#                            <div class="lk-video-content__video__title">Обучение на стилиста с нуля</div>#}
-{#                            <a href="#" class="full-link"></a>#}
-{#                        </div>#}
                     </div>
                 </div>
             </div>

@@ -199,16 +199,24 @@ if (document.querySelector('#button-video')){
 
 //Запуск свертывания блока FAQ
 //Страница: Главная, О школе, Курсы, Страница Курса
-if (document.querySelector('.faq-block')){
+if (document.querySelector('.faq-block')) {
     let FaqBlock = document.querySelectorAll('.faq-block');
     let buttonFaq = document.querySelectorAll('#button-faq');
 
-    for (var i = 0; i < FaqBlock.length; i++){
+    for (var i = 0; i < FaqBlock.length; i++) {
         buttonFaq[i].addEventListener('click', function () {
-            for (var j = 0; j < FaqBlock.length; j++){
-                FaqBlock[j].classList.remove('active');
-            };
-            this.parentNode.classList.add('active');
+            // Проверяем, есть ли у текущего блока класс 'active'
+            if (this.parentNode.classList.contains('active')) {
+                // Если есть, убираем его
+                this.parentNode.classList.remove('active');
+            } else {
+                // Если нет, убираем класс 'active' у всех блоков
+                for (var j = 0; j < FaqBlock.length; j++) {
+                    FaqBlock[j].classList.remove('active');
+                }
+                // Добавляем класс 'active' к текущему блоку
+                this.parentNode.classList.add('active');
+            }
         });
     }
 }
@@ -322,21 +330,21 @@ if (document.querySelector('.blog-container')){
     const BlogLengthMax = 3; //количество вывода статей при нажатии на "показать еще"
 
     //кнопка показать еще
-    buttonBlogShow.addEventListener('click', function() {
-        let BlogActiveShowFalseAll = document.querySelectorAll('.blog-container.show-false');
-        
-        if (BlogActiveShowFalseAll.length <= BlogLengthMax){
-            buttonBlogShow.style.display = 'none'}
-        else {
-            buttonBlogShow.style.display = 'block'}
-
-        for (var i = 0; i < BlogLengthMax; i++) {
-            if (document.querySelector('.show-false')) {
-                BlogActiveShowFalseAll[i].classList.remove('show-false');
-                BlogActiveShowFalseAll[i].classList.add('show-true');
-            } 
-        }
-    })
+    // buttonBlogShow.addEventListener('click', function() {
+    //     let BlogActiveShowFalseAll = document.querySelectorAll('.blog-container.show-false');
+    //
+    //     if (BlogActiveShowFalseAll.length <= BlogLengthMax){
+    //         buttonBlogShow.style.display = 'none'}
+    //     else {
+    //         buttonBlogShow.style.display = 'block'}
+    //
+    //     for (var i = 0; i < BlogLengthMax; i++) {
+    //         if (document.querySelector('.show-false')) {
+    //             BlogActiveShowFalseAll[i].classList.remove('show-false');
+    //             BlogActiveShowFalseAll[i].classList.add('show-true');
+    //         }
+    //     }
+    // })
 
     //показываем первые три блока
     for (var i = 0; i < BlogAll.length; i++) {
@@ -414,21 +422,21 @@ if (document.querySelector('.reviews-container')){
     const ReviewsLengthMax = 3; //количество вывода статей при нажатии на "показать еще"
 
     //кнопка показать еще
-    buttonReviewsShow.addEventListener('click', function() {
-        let ReviewsActiveShowFalseAll = document.querySelectorAll('.reviews-container.show-false');
-        
-        if (ReviewsActiveShowFalseAll.length <= ReviewsLengthMax){
-            buttonReviewsShow.style.display = 'none'}
-        else {
-            buttonReviewsShow.style.display = 'block'}
-
-        for (var i = 0; i < ReviewsLengthMax; i++) {
-            if (document.querySelector('.show-false')) {
-                ReviewsActiveShowFalseAll[i].classList.remove('show-false');
-                ReviewsActiveShowFalseAll[i].classList.add('show-true');
-            } 
-        }
-    })
+    // buttonReviewsShow.addEventListener('click', function() {
+    //     let ReviewsActiveShowFalseAll = document.querySelectorAll('.reviews-container.show-false');
+    //
+    //     if (ReviewsActiveShowFalseAll.length <= ReviewsLengthMax){
+    //         buttonReviewsShow.style.display = 'none'}
+    //     else {
+    //         buttonReviewsShow.style.display = 'block'}
+    //
+    //     for (var i = 0; i < ReviewsLengthMax; i++) {
+    //         if (document.querySelector('.show-false')) {
+    //             ReviewsActiveShowFalseAll[i].classList.remove('show-false');
+    //             ReviewsActiveShowFalseAll[i].classList.add('show-true');
+    //         }
+    //     }
+    // })
 
     //показываем первые три блока
     for (var i = 0; i < ReviewsAll.length; i++) {
@@ -475,22 +483,22 @@ if (document.documentElement.clientWidth < 768) {
         let MyCoursesAll = document.querySelectorAll('.my-courses-container');
         const MyCoursesLengthMax = 3; //количество вывода статей при нажатии на "показать еще"
     
-        //кнопка показать еще
-        buttonMyCoursesShow.addEventListener('click', function() {
-            let MyCoursesActiveShowFalseAll = document.querySelectorAll('.my-courses-container.show-false');
-            
-            if (MyCoursesActiveShowFalseAll.length <= MyCoursesLengthMax){
-                buttonMyCoursesShow.style.display = 'none'}
-            else {
-                buttonMyCoursesShow.style.display = 'block'}
-    
-            for (var i = 0; i < MyCoursesLengthMax; i++) {
-                if (document.querySelector('.show-false')) {
-                    MyCoursesActiveShowFalseAll[i].classList.remove('show-false');
-                    MyCoursesActiveShowFalseAll[i].classList.add('show-true');
-                } 
-            }
-        })
+        // //кнопка показать еще
+        // buttonMyCoursesShow.addEventListener('click', function() {
+        //     let MyCoursesActiveShowFalseAll = document.querySelectorAll('.my-courses-container.show-false');
+        //
+        //     if (MyCoursesActiveShowFalseAll.length <= MyCoursesLengthMax){
+        //         buttonMyCoursesShow.style.display = 'none'}
+        //     else {
+        //         buttonMyCoursesShow.style.display = 'block'}
+        //
+        //     for (var i = 0; i < MyCoursesLengthMax; i++) {
+        //         if (document.querySelector('.show-false')) {
+        //             MyCoursesActiveShowFalseAll[i].classList.remove('show-false');
+        //             MyCoursesActiveShowFalseAll[i].classList.add('show-true');
+        //         }
+        //     }
+        // })
     
         //показываем первые три блока
         for (var i = 0; i < MyCoursesAll.length; i++) {
@@ -514,36 +522,36 @@ if (document.documentElement.clientWidth > 768) {
         let MyCoursesAll = document.querySelectorAll('.my-courses-container');
         const MyCoursesLengthMax = 6; //количество вывода статей при нажатии на "показать еще"
     
-        //кнопка показать еще
-        buttonMyCoursesShow.addEventListener('click', function() {
-            let MyCoursesActiveShowFalseAll = document.querySelectorAll('.my-courses-container.show-false');
-            
-            if (MyCoursesActiveShowFalseAll.length <= MyCoursesLengthMax){
-                buttonMyCoursesShow.style.display = 'none'}
-            else {
-                buttonMyCoursesShow.style.display = 'block'}
+        // //кнопка показать еще
+        // buttonMyCoursesShow.addEventListener('click', function() {
+        //     let MyCoursesActiveShowFalseAll = document.querySelectorAll('.my-courses-container.show-false');
+        //
+        //     if (MyCoursesActiveShowFalseAll.length <= MyCoursesLengthMax){
+        //         buttonMyCoursesShow.style.display = 'none'}
+        //     else {
+        //         buttonMyCoursesShow.style.display = 'block'}
+        //
+        //     for (var i = 0; i < MyCoursesLengthMax; i++) {
+        //         if (document.querySelector('.show-false')) {
+        //             MyCoursesActiveShowFalseAll[i].classList.remove('show-false');
+        //             MyCoursesActiveShowFalseAll[i].classList.add('show-true');
+        //         }
+        //     }
+        // })
     
-            for (var i = 0; i < MyCoursesLengthMax; i++) {
-                if (document.querySelector('.show-false')) {
-                    MyCoursesActiveShowFalseAll[i].classList.remove('show-false');
-                    MyCoursesActiveShowFalseAll[i].classList.add('show-true');
-                } 
-            }
-        })
-    
-        //показываем первые шесть блоков
-        for (var i = 0; i < MyCoursesAll.length; i++) {
-            if (MyCoursesAll.length >= MyCoursesLengthMax){
-                MyCoursesAll[i].classList.add('show-false');
-                for (var j = 0; j < MyCoursesLengthMax; j++) {
-                    MyCoursesAll[j].classList.remove('show-false');
-                    MyCoursesAll[j].classList.add('show-true');
-                }
-                buttonMyCoursesShow.style.display = 'block'
-            } else {
-                MyCoursesAll[i].classList.add('show-true');
-                buttonMyCoursesShow.style.display = 'none'}
-        }
+        // //показываем первые шесть блоков
+        // for (var i = 0; i < MyCoursesAll.length; i++) {
+        //     if (MyCoursesAll.length >= MyCoursesLengthMax){
+        //         MyCoursesAll[i].classList.add('show-false');
+        //         for (var j = 0; j < MyCoursesLengthMax; j++) {
+        //             MyCoursesAll[j].classList.remove('show-false');
+        //             MyCoursesAll[j].classList.add('show-true');
+        //         }
+        //         buttonMyCoursesShow.style.display = 'block'
+        //     } else {
+        //         MyCoursesAll[i].classList.add('show-true');
+        //         buttonMyCoursesShow.style.display = 'none'}
+        // }
     }
 }
 

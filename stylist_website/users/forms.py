@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm, UserCreationForm
 from tempus_dominus.widgets import DateTimePicker
-
+from datetime import time
 from users.models import Review, ScheduleDate, User, UserServices
 from users.tasks import send_email_verification
 
@@ -182,27 +182,29 @@ class ServicePurchaseForm(forms.ModelForm):
     """
     datetime_of_service = forms.DateTimeField(widget=DateTimePicker(options={
         'format': 'YYYY-MM-DD HH:mm',
-        'useCurrent': False,
         'stepping': 60,
-        'enabledHours': [10, 11, 12, 13, 14, 15, 16, 17, 18],
+        'enabledHours': [12, 13, 14, 15, 16, 17, 18],
         'icons': {
             'time': "fa fa-clock-o",
             'date': "fa fa-calendar",
             'up': "fa fa-arrow-up",
             'down': "fa fa-arrow-down"
         },
+
     },
         attrs={
             'placeholder': 'Выберете дату и время услуги'}
     ))
     class Meta:
         model = UserServices
-        fields = ('datetime_of_service', )
+        fields = ('datetime_of_service', 'status')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Updates available dates before loading the form
         self.fields['datetime_of_service'].widget.js_options['enabledDates'] = list(map(lambda x: x.strftime("%Y-%m-%d"), ScheduleDate.objects.filter(is_booked=False).values_list('date', flat=True)))
+        first_free_date = ScheduleDate.objects.filter(is_booked=False).order_by('date').first().date
+        self.fields['datetime_of_service'].widget.js_options['defaultDate'] = first_free_date.strftime("%Y-%m-%d")
 
 
 

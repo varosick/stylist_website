@@ -44,24 +44,43 @@
             </div>
         </div>
     </section>
+    <section class="faq container">
+        <div class="faq__title text-title container">
+            Превью
+        </div>
+        <br>
+        <div class="carousel" style="max-height: 1000px; aspect-ratio: 2 / 3; width: auto">
+                <div class="carousel_slides">
+                    {% for carousel_image in carousel_images %}
+                    <div class="carousel_slide" >
+                        <img src="{{ carousel_image.image.url }}">
+                    </div>
+                    {% endfor %}
+                    <!-- Добавьте больше слайдов по необходимости -->
+                </div>
+                <button class="carousel_prev">&#10094;</button>
+                <button class="carousel_next">&#10095;</button>
+            </div>
+        </section>
+    </section>
     <div id="modal-buy-course" class="zoom-anim-dialog mfp-hide">
         <div class="modal-content text-center">
             <p class="modal-title">
                 Приобрести гайд “{{ guide.name }}”
             </p>
-            <div class="modal-buy__price" data-price="10 000 000 р.">{{ guide.price_czk | floatformat:0 }} CZK</div>
+            <div class="modal-buy__price" data-price="10 000 000 р.">{{ object.price_czk | floatformat:0 }} Kč / {{ object.price_eur | floatformat:0 }} €</div>
             <p class="text-normal mt-4">
             <form action="{% url 'products:guide_detail' guide_slug=guide.slug %}"
                   method="post">
                 {% csrf_token %}
                 <p class="text-normal">
                     Произведите оплату
-                    <a href="https://revolut.me/varosick" target="_blank" class="text-underline">
+                    <a href="https://revolut.me/mariiag9vn" target="_blank" class="text-underline" style="color: black">
                         по ссылке
                     </a>
                     <br>
                     <br>
-                    После проверки оплаты услуга будет доступна в Личном кабинете
+                    После проверки оплаты гайд будет доступен в личном кабинете
                     <br>
                 </p>
                 <div class="modal-registration__button">

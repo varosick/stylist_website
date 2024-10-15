@@ -9,6 +9,8 @@ class ProductCategory(models.Model):
     preparation_offline = models.TextField(null=True, blank=True)
     preparation_online = models.TextField(null=True, blank=True)
     content_image = models.ImageField(upload_to='media/products/categories/', null=True, blank=True)
+    gdrive_img_offline = models.URLField(null=True, blank=True)
+    gdrive_img_online = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -31,7 +33,7 @@ class Product(models.Model):
     price_eur = models.DecimalField(max_digits=6, decimal_places=2)
     category = models.ForeignKey(to=ProductCategory, on_delete=models.PROTECT)
     slug = models.SlugField(max_length=128, unique=True)
-    image = models.ImageField(upload_to=f'media/products/products/{slug}', null=True, blank=True)
+    image = models.ImageField(upload_to=f'media/products/products/', null=True, blank=True)
 
     def __str__(self):
         return f'{self.name} {self.category.name}'
@@ -65,7 +67,7 @@ class Guide(models.Model):
     price_eur = models.DecimalField(max_digits=6, decimal_places=2)
     gdrive_file_url = models.URLField(null=True, blank=True)
     slug = models.SlugField(max_length=128, unique=True)
-    image = models.ImageField(upload_to=f'media/products/guides/{slug}', null=True, blank=True)
+    image = models.ImageField(upload_to=f'media/products/guides/', null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -73,6 +75,12 @@ class Guide(models.Model):
     def get_absolute_url(self):
         return f'/guides/{self.slug}/'
 
+class GuideCarouselImage(models.Model):
+    guide = models.ForeignKey(Guide, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=f'media/products/guides/images_for_carousel/')
+
+    def __str__(self):
+        return f'Изображение для карусели гайда: {self.guide}'
 
 class NotUserReview(models.Model):
     reviewer_first_name = models.CharField(max_length=128)

@@ -113,12 +113,12 @@ class UsersReviewsView(FormMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        context_data['not_user_reviews'] =  cache.get_or_set('not_user_reviews', NotUserReview.objects.all(), 30)
+        context_data['not_user_reviews'] =  cache.get_or_set('not_user_reviews', NotUserReview.objects.all().order_by('-date'), 30)
         context_data['title'] = 'Отзывы'
         return context_data
 
     def get_queryset(self):
-        return Review.objects.filter(is_approved=True)
+        return Review.objects.filter(is_approved=True).order_by('-date')
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()

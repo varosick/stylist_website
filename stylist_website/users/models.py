@@ -37,11 +37,18 @@ class UserServices(models.Model):
         PREPAYMENT = 1
         PAID = 2
 
+    class Event(models.Model):
+        STATUS_CHOICES = [
+            ('offline', 'Оффлайн'),
+            ('online', 'Онлайн'),
+        ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     service = models.ForeignKey(Product, on_delete=models.CASCADE)
     date_of_purchase = models.DateTimeField(auto_now_add=True)
     payment_status = models.IntegerField(default=0, choices=Payment)
     datetime_of_service = models.DateTimeField(default=datetime.now)
+    status = models.CharField(choices=Event.STATUS_CHOICES, default='offline')
     gdrive_file_url = models.URLField(null=True, blank=True)
 
     def save(self, *args, **kwargs):

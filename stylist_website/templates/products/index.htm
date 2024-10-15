@@ -2,7 +2,6 @@
 {% load static %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-    <!-- html код -->
     <section class="home-first">
         <div class="home-first-flex container">
             <div class="home-first-name">
@@ -171,5 +170,19 @@
             </div>
         </div>
     </section>
-
+    <style>
+        a {
+            color: #000000;
+        }
+        
+        .header-logo__white {
+        display: none;
+        width: 100%;
+        }
+        
+        .header-logo__black {
+        width: 100%;
+        display: block;
+        }
+    </style>
 {% endblock %}

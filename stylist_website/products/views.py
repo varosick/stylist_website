@@ -6,7 +6,7 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 
 from products.models import (CarouselImage, Guide, Product, ProductCategory,
-                             ProductDetail, Question)
+                             ProductDetail, Question, GuideCarouselImage)
 from users.forms import ServicePurchaseForm
 from users.models import ScheduleDate, UserGuides
 from users.tasks import send_emails_guides, send_emails_services
@@ -57,7 +57,7 @@ class IndexView(ListView):
         return context_data
 
     def get_queryset(self):
-        return ProductCategory.objects.all()
+        return ProductCategory.objects.all().order_by('id')
 
 
 class CategoryDetailView(ListView):
@@ -156,6 +156,7 @@ class GuideDetailView(DetailView):
         if self.request.user.is_authenticated:
             context_data['user_guides'] = UserGuides.objects.filter(user=self.request.user).values_list('guide__id', flat=True)
         context_data['title'] = str(self.get_object().name)
+        context_data['carousel_images'] = GuideCarouselImage.objects.filter(guide__slug=self.kwargs['guide_slug'])
         return context_data
 
     def post(self, request, *args, **kwargs):

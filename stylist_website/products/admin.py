@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from products.models import (CarouselImage, Guide, NotUserReview, Product,
-                             ProductCategory, ProductDetail, Question)
+                             ProductCategory, ProductDetail, Question, GuideCarouselImage)
 
 
 @admin.register(ProductCategory)
@@ -55,3 +55,11 @@ class Admin(admin.ModelAdmin):
     ordering = ('category', 'id')
     search_fields = ('category__name', )
     list_filter = ('category__name',)
+
+@admin.register(GuideCarouselImage)
+class Admin(admin.ModelAdmin):
+    list_display = ('id', 'guide__name', )
+    list_display_links = ('id', 'guide__name')
+    ordering = ('guide__name', 'id')
+    search_fields = ('guide__name', )
+    list_filter = ('guide__name',)
