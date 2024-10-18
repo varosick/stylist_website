@@ -29,7 +29,7 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgres/data/
-      - ./stylist_db_backup.sql:/stylist_db_backup.sql
+      - ./backup.sql:/backup.sql
 
   redis:
     image: redis:latest
