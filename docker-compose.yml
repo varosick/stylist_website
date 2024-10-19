@@ -54,10 +54,22 @@ services:
     volumes:
       - static_data:/stylist_website/static
       - static_media:/stylist_website/media
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - django-app
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot/ --email ваш@email --agree-tos --no-eff-email -d имя_вашего_домена -d www.имя_вашего_домена
+    depends_on:
+      - nginx
 
 volumes:
   pg_data:
