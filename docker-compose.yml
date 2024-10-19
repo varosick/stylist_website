@@ -67,7 +67,7 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot/ --email ваш@email --agree-tos --no-eff-email -d имя_вашего_домена -d www.имя_вашего_домена
+    command: certonly --webroot --webroot-path=/var/www/certbot/ --email sokolovamariia55@gmail.com --agree-tos --no-eff-email -d kallishevich.site -d www.kallishevich.site
     depends_on:
       - nginx
 
