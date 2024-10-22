@@ -8,7 +8,7 @@ from products.views import (CategoryDetailView, GuideDetailView, IndexView,
 
 app_name = 'products'
 urlpatterns = [
-    path('', IndexView.as_view(), name='index'),
+    path('', cache_page(60*60*24)(IndexView.as_view()), name='index'),
     path('products/<slug:category_slug>/', CategoryDetailView.as_view(), name='category_detail'),
     path('products/<slug:category_slug>/<slug:product_slug>/', ProductDetailView.as_view(), name='product_detail'),
     path('guides/<slug:guide_slug>/', GuideDetailView.as_view(), name='guide_detail'),
