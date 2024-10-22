@@ -14,7 +14,6 @@ services:
     volumes:
       - static_data:/stylist_website/static
       - static_media:/stylist_website/media
-      - stylist_website:/stylist_website
 
   postgres-db:
     image: postgres:latest
@@ -75,4 +74,3 @@ volumes:
   pg_data:
   static_data:
   static_media:
-  stylist_website:
