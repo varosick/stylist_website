@@ -63,42 +63,6 @@
         </div>
     </section>
 
-{#    <section class="content container">#}
-{#        <div class="content__text container">#}
-{#            #}
-{#        </div>#}
-{#    </section>#}
-{##}
-{#    <section class="speakers container">#}
-{#        <div class="speakers__title text-title">#}
-{#            Спикер#}
-{#        </div>#}
-{#        <div class="speakers-flex">#}
-{#            <div class="speakers-block">#}
-{#                <div class="speakers-block__img">#}
-{#                    <img src="{% static 'images/logo-black.svg' %}" alt="Стилист Мария Александрова">#}
-{#                </div>#}
-{#                <div class="speakers-block-flex">#}
-{#                    <div class="speakers-block-person">#}
-{#                        <div class="speakers-block__name">#}
-{#                            Георгий Карцев#}
-{#                        </div>#}
-{#                        <div class="speakers-block__post">#}
-{#                            Стилист#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <div class="speakers-block-social">#}
-{#                        <a rel="nofollow" target="_blank" href="https://www.instagram.com/goshakartsev"#}
-{#                           class="speakers-block-social__instagram button-icon-white"></a>#}
-{#                        <a rel="nofollow" target="_blank" href="https://www.youtube.com/user/goshakartsev"#}
-{#                           class="speakers-block-social__youtube button-icon-white"></a>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </section>#}
-
-
     <section class="how-be container">
         <div class="how-be__title text-title">
             Что в себя включает услуга
@@ -142,6 +106,7 @@
                             <label class="text-normal">{{ error }}</label>
                         {% endfor %}
                     {% endif %}
+                    <br>
                     <p class="text-normal">Дата оказания услуги: {{ form.datetime_of_service }}</p>
                     <p class="text-normal">Выберете вид оказания услуги: {{ form.status }}</p>
                     <style>
